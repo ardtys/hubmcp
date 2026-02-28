@@ -710,13 +710,8 @@
           </div>
         </div>
 
-        <!-- Network Info -->
+        <!-- Token Info -->
         <div class="flex flex-wrap items-center justify-center gap-4 mt-6 text-sm">
-          <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-[#1a1a1a] border border-[#2e2e2e]">
-            <span class="w-2 h-2 rounded-full bg-green-500"></span>
-            <span class="text-neutral-400">Network:</span>
-            <span class="text-white font-medium">Placeholder</span>
-          </div>
           <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-[#1a1a1a] border border-[#2e2e2e]">
             <span class="text-neutral-400">Symbol:</span>
             <span class="text-white font-medium">$HUBMCP</span>
