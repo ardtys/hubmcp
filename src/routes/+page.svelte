@@ -17,9 +17,13 @@
   let toastMessage = $state('');
   let showFloatingCTA = $state(false);
 
-  const contractAddress = '681pbsdyHHe7PgWTKtG12QqUoMQf1nZAjQ6VmuU3BAGS';
+  const contractAddress = 'Coming Soon...';
 
   function copyContract() {
+    if (contractAddress === 'Coming Soon...') {
+      showToastNotification('Contract address coming soon!');
+      return;
+    }
     navigator.clipboard.writeText(contractAddress);
     contractCopied = true;
     showToastNotification('Contract address copied!');
@@ -748,7 +752,7 @@
           <div class="relative p-6 rounded-2xl bg-[#141414] border border-[#2e2e2e] hover:border-[#dc7c6a]/30 transition-all duration-300">
             <div class="flex flex-col sm:flex-row items-center gap-4">
               <div class="flex-1 w-full">
-                <p class="text-xs text-neutral-500 mb-2 text-left">Contract Address</p>
+                <p class="text-xs text-neutral-500 mb-2 text-left">Contract Address (Coming Soon)</p>
                 <div class="flex items-center gap-3 p-4 rounded-xl bg-[#0d0d0d] border border-[#1f1f1f]">
                   <code class="text-sm sm:text-base font-mono text-[#dc7c6a] break-all select-all">
                     {contractAddress}
