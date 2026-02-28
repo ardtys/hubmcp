@@ -9,6 +9,15 @@
   let mouseX = $state(0);
   let mouseY = $state(0);
   let particles = $state([]);
+  let contractCopied = $state(false);
+
+  const contractAddress = '0x0000000000000000000000000000000000000000';
+
+  function copyContract() {
+    navigator.clipboard.writeText(contractAddress);
+    contractCopied = true;
+    setTimeout(() => contractCopied = false, 2000);
+  }
 
   const mcpServers = [
     { name: 'Gmail', desc: 'Read, send, organize emails', category: 'Productivity', gradient: 'from-red-500 to-orange-500' },
@@ -649,6 +658,74 @@
     </div>
   </section>
 
+  <!-- Contract Address Section -->
+  <section class="py-16 lg:py-24 px-4 sm:px-6 lg:px-12 relative overflow-hidden bg-[#0a0a0a]">
+    <div class="absolute inset-0 bg-[linear-gradient(rgba(220,124,106,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(220,124,106,0.02)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+
+    <div class="max-w-4xl mx-auto relative">
+      <div class="animate-on-scroll text-center">
+        <span class="inline-flex items-center gap-2 text-[#dc7c6a] font-mono text-sm mb-4 px-3 py-1 rounded-full bg-[#dc7c6a]/10 border border-[#dc7c6a]/20">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+          </svg>
+          CONTRACT ADDRESS
+        </span>
+
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4">
+          Official Contract
+        </h2>
+        <p class="text-neutral-400 mb-8 max-w-xl mx-auto">
+          Verify and copy the official Hub MCP contract address below.
+        </p>
+
+        <!-- Contract Address Box -->
+        <div class="relative group">
+          <div class="absolute -inset-1 bg-gradient-to-r from-[#dc7c6a]/20 via-purple-500/10 to-[#dc7c6a]/20 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+          <div class="relative p-6 rounded-2xl bg-[#141414] border border-[#2e2e2e] hover:border-[#dc7c6a]/30 transition-all duration-300">
+            <div class="flex flex-col sm:flex-row items-center gap-4">
+              <div class="flex-1 w-full">
+                <p class="text-xs text-neutral-500 mb-2 text-left">Contract Address (Placeholder)</p>
+                <div class="flex items-center gap-3 p-4 rounded-xl bg-[#0d0d0d] border border-[#1f1f1f]">
+                  <code class="text-sm sm:text-base font-mono text-[#dc7c6a] break-all select-all">
+                    {contractAddress}
+                  </code>
+                </div>
+              </div>
+              <button
+                onclick={copyContract}
+                class="flex-shrink-0 p-4 rounded-xl bg-[#dc7c6a] hover:bg-[#c96b5a] text-white transition-all duration-300 hover:scale-105"
+                aria-label="Copy contract address"
+              >
+                {#if contractCopied}
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                {:else}
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                {/if}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Network Info -->
+        <div class="flex flex-wrap items-center justify-center gap-4 mt-6 text-sm">
+          <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-[#1a1a1a] border border-[#2e2e2e]">
+            <span class="w-2 h-2 rounded-full bg-green-500"></span>
+            <span class="text-neutral-400">Network:</span>
+            <span class="text-white font-medium">Placeholder</span>
+          </div>
+          <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-[#1a1a1a] border border-[#2e2e2e]">
+            <span class="text-neutral-400">Symbol:</span>
+            <span class="text-white font-medium">$HUBMCP</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA Section -->
   <section class="py-16 lg:py-32 px-4 sm:px-6 lg:px-12 relative overflow-hidden">
     <div class="absolute inset-0 bg-gradient-to-r from-[#dc7c6a]/10 via-purple-500/5 to-[#dc7c6a]/10"></div>
@@ -703,16 +780,6 @@
               </a>
             </div>
 
-            <!-- Trust badges -->
-            <div class="mt-10 lg:mt-12 pt-8 border-t border-[#2e2e2e]">
-              <p class="text-neutral-600 text-sm mb-4">Trusted by developers at</p>
-              <div class="flex flex-wrap justify-center items-center gap-6 lg:gap-10 opacity-50">
-                <span class="text-neutral-400 font-semibold text-lg">Company</span>
-                <span class="text-neutral-400 font-semibold text-lg">Company</span>
-                <span class="text-neutral-400 font-semibold text-lg">Company</span>
-                <span class="text-neutral-400 font-semibold text-lg">Company</span>
-              </div>
-            </div>
           </div>
         </div>
       </div>
