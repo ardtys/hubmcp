@@ -11,12 +11,32 @@
   let particles = $state([]);
   let contractCopied = $state(false);
 
+  // New feature states
+  let scrollProgress = $state(0);
+  let showToast = $state(false);
+  let toastMessage = $state('');
+  let showFloatingCTA = $state(false);
+
   const contractAddress = '681pbsdyHHe7PgWTKtG12QqUoMQf1nZAjQ6VmuU3BAGS';
 
   function copyContract() {
     navigator.clipboard.writeText(contractAddress);
     contractCopied = true;
+    showToastNotification('Contract address copied!');
     setTimeout(() => contractCopied = false, 2000);
+  }
+
+  function showToastNotification(message) {
+    toastMessage = message;
+    showToast = true;
+    setTimeout(() => showToast = false, 3000);
+  }
+
+  function updateScrollProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    scrollProgress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    showFloatingCTA = scrollTop > 500;
   }
 
   const mcpServers = [
@@ -102,6 +122,7 @@
   onMount(() => {
     mounted = true;
     initParticles();
+    updateScrollProgress();
 
     const updateTime = () => {
       const now = new Date();
@@ -127,10 +148,13 @@
 
     document.querySelectorAll('.animate-on-scroll').forEach((el) => observer.observe(el));
 
+    window.addEventListener('scroll', updateScrollProgress);
+
     return () => {
       clearInterval(interval);
       clearInterval(testimonialInterval);
       observer.disconnect();
+      window.removeEventListener('scroll', updateScrollProgress);
     };
   });
 </script>
@@ -142,6 +166,46 @@
   <meta name="description" content="The easiest way to connect Claude to Gmail, Notion, Slack, and 200+ other apps. No terminal required." />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 </svelte:head>
+
+<!-- Scroll Progress Bar -->
+<div class="fixed top-0 left-0 w-full h-1 z-[100] bg-transparent">
+  <div
+    class="h-full bg-gradient-to-r from-[#dc7c6a] via-[#f4a393] to-[#dc7c6a] transition-all duration-150 ease-out shadow-lg shadow-[#dc7c6a]/50"
+    style="width: {scrollProgress}%"
+  ></div>
+</div>
+
+<!-- Toast Notification -->
+{#if showToast}
+  <div class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[100] animate-toast-in">
+    <div class="flex items-center gap-3 px-5 py-3 bg-[#1a1a1a] border border-[#dc7c6a]/30 rounded-xl shadow-2xl shadow-[#dc7c6a]/20">
+      <div class="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center">
+        <svg class="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <span class="text-white font-medium text-sm">{toastMessage}</span>
+    </div>
+  </div>
+{/if}
+
+<!-- Floating CTA Button -->
+{#if showFloatingCTA}
+  <a
+    href="#waitlist"
+    class="fixed bottom-6 right-6 z-[90] group animate-fade-in-up"
+  >
+    <div class="relative">
+      <div class="absolute -inset-1 bg-gradient-to-r from-[#dc7c6a] to-[#c96b5a] rounded-full blur-lg opacity-70 group-hover:opacity-100 transition-opacity duration-300 animate-pulse"></div>
+      <div class="relative flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-[#dc7c6a] to-[#c96b5a] text-white font-semibold rounded-full shadow-xl hover:shadow-2xl hover:shadow-[#dc7c6a]/40 transition-all duration-300 hover:-translate-y-1">
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+        <span class="hidden sm:inline">Join Waitlist</span>
+      </div>
+    </div>
+  </a>
+{/if}
 
 <!-- Animated Background -->
 <div class="fixed inset-0 overflow-hidden pointer-events-none">
@@ -847,6 +911,21 @@
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  @keyframes toast-in {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(20px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0) scale(1);
+    }
+  }
+
+  .animate-toast-in {
+    animation: toast-in 0.3s ease-out forwards;
   }
 
   @keyframes fade-in-up {
